@@ -15,6 +15,7 @@ File System: TBD, should be easily replaceable
  
 
 ####Run book
+```
 git clone git@github.com:honeycombcmu/handix.git
 
 cd honeyfs
@@ -26,5 +27,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 python app.py
+```
 
 Week 1: 
