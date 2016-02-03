@@ -10,5 +10,9 @@ def hello_world():
 def health():
     return 'ok'
 
+@app.route('/putintofs/<path>', methods=['POST'])
+def putfile():
+    return 'ok'
+
 if __name__ == '__main__':
     app.run()
