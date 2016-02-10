@@ -16,6 +16,11 @@ def ls(path):
     payload = {'op': 'LISTSTATUS'}
     sendrequest(path=path, params=payload)
 
+@app.route("/mkdir/<path>", methods=['PUT'])
+def ls(path):
+    payload = {'op': 'MKDIRS'}
+    sendrequest(path=path, params=payload)
+
 
 @app.route('/putintofs/<path>', methods=['POST'])
 def putfile():
