@@ -1,5 +1,7 @@
-
+import ipdb
 from flask import Flask
+from flask import request
+import requests
 from HDFSClient import sendrequest
 app = Flask(__name__)
 
@@ -17,18 +19,26 @@ def ls(path):
     sendrequest(path=path, params=payload)
 
 @app.route("/mkdir/<path>", methods=['PUT'])
-def ls(path):
+def mkdir(path):
     payload = {'op': 'MKDIRS'}
     sendrequest(path=path, params=payload)
 
 
-@app.route('/putintofs/<path>', methods=['POST'])
+@app.route('/putintofs', methods=['POST'])
 def putfile():
-    return 'ok'
+    local_path = request.args.get("local", "")
+    dest_path = request.args.get("dest", "")
+    payload = {"op": "CREATE"}
+    response = sendrequest(path=dest_path, params=payload)
+    datanode =response.headers["Location"]
+    file = open(local_path).read()
+    response = requests.put(datanode, file=file)
+    return response.text
 
 @app.route('/getfromfs/<path>', methods=['GET'])
 def getfile(path):
-    print path
+    payload = {"op": "OPEN"}
+    response = sendrequest(path=path, params=payload)
     return 'ok'
 
 @app.route('/mov/from/<path1>/<path2>', methods=['GET'])
