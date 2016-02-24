@@ -1,6 +1,6 @@
 
 Endpoint for start a new job:<br/>
-  ip:port/jobs?algorithm=<algorithm_name>
+  ip:port/jobs?algorithm=algorithm_name
   Example usage: 
     curl --data-binary @my-job-config.json 'localhost:8090/jobs?algorithm=knn'
     
@@ -16,7 +16,7 @@ Endpoint for start a new job:<br/>
     
     
 Endpoint for check status of a job:
-    <ip>:<port>/jobs/<job-id>
+    ip:port/jobs/job-id
     Example usage: 
       curl 'localhost:8090/jobs/122312-adfsasdf-123213-qewq-wqeqw121211'  
     example result:
