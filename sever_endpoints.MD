@@ -6,6 +6,7 @@ Endpoint for start a new job:<br/>
     curl --data-binary @my-job-config.json 'localhost:8090/jobs?algorithm=knn'
     
   example result:
+  ```
    {
    "status": "STARTED",
    "result": {
@@ -13,8 +14,8 @@ Endpoint for start a new job:<br/>
     "algorithm": "knn"
     "config": "my-job-config.json"
     }
-   }⏎
-  
+   }
+  ```
     
     
 Endpoint for check status of a job:
