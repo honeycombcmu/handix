@@ -2,7 +2,7 @@ import ipdb
 from flask import Flask
 from flask import request
 import requests
-from HDFSClient import sendrequest
+from HDFSService import webclient
 app = Flask(__name__)
 
 @app.route('/')
@@ -16,12 +16,12 @@ def health():
 @app.route("/ls/<path>", methods=['GET'])
 def ls(path):
     payload = {'op': 'LISTSTATUS'}
-    sendrequest(path=path, params=payload)
+    webclient.sendrequest(path=path, params=payload)
 
 @app.route("/mkdir/<path>", methods=['PUT'])
 def mkdir(path):
     payload = {'op': 'MKDIRS'}
-    sendrequest(path=path, params=payload)
+    webclient.sendrequest(path=path, params=payload)
 
 
 @app.route('/putintofs', methods=['POST'])
@@ -29,7 +29,7 @@ def putfile():
     local_path = request.args.get("local", "")
     dest_path = request.args.get("dest", "")
     payload = {"op": "CREATE"}
-    response = sendrequest(path=dest_path, params=payload)
+    response = webclient.sendrequest(path=dest_path, params=payload)
     datanode =response.headers["Location"]
     file = open(local_path).read()
     response = requests.put(datanode, file=file)
@@ -38,7 +38,7 @@ def putfile():
 @app.route('/getfromfs/<path>', methods=['GET'])
 def getfile(path):
     payload = {"op": "OPEN"}
-    response = sendrequest(path=path, params=payload)
+    response = webclient.sendrequest(path=path, params=payload)
     return 'ok'
 
 @app.route('/mov/from/<path1>/<path2>', methods=['GET'])
