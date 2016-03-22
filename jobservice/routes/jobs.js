@@ -11,6 +11,7 @@ router.use(function(req, res, next) {
 
     // log each request to the console
     console.log(req.method, req.url);
+    console.log(req.body);
 
     // continue doing what we were doing and go to the route
     next();
@@ -19,6 +20,7 @@ router.use(function(req, res, next) {
 router.post('/', function(req, res, next) {
     cmd = 'HADOOP_USER_NAME=hdfs /bin/spark-submit /home/honeycomb/SparkTeam/PySpark.py ';
     cmd += req.body.traindata+ ' ' + req.body.testdata + ' '+ req.body.outpath;
+    console.log(cmd);
     exec('my.bat', function(err, stdout, stderr){
         //TODO: change status of the job
         if (err) {
