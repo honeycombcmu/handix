@@ -21,7 +21,7 @@ router.post('/', function(req, res, next) {
     cmd = 'HADOOP_USER_NAME=hdfs /bin/spark-submit /home/honeycomb/SparkTeam/PySpark.py ';
     cmd += req.body.traindata+ ' ' + req.body.testdata + ' '+ req.body.outpath;
     console.log(cmd);
-    exec('my.bat', function(err, stdout, stderr){
+    exec(cmd, function(err, stdout, stderr){
         //TODO: change status of the job
         if (err) {
             console.error(err);
