@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var util = require('util');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     console.log(req.query);
@@ -9,8 +9,9 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('', function(req, res, next) {
-    console.log(req.body);
+router.post('/', function(req, res, next) {
+    console.log(util.inspect(req,false, null));
+    //console.log(req.body);
     console.log(req.query);
     res.render('index', { title: 'Express' });
 });
