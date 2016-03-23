@@ -34,10 +34,10 @@ router.post('/put', multer({storage: storage}).single('data'), function(req, res
     var filename = req.query.filename;
     var filepath = '/user/spark/' +user + 'input/' +filename;
     var local = localDir + user+ filename;
-
-    cmd += req.query;
+    cmd += ' ' + localDir + '/' + user + '/' + filename;
+    cmd += ' ' + filepath;
     console.log(cmd);
-    /*
+
     exec(cmd, function(err, stdout, stderr){
         //TODO: change status of the job
         if (err) {
@@ -46,10 +46,10 @@ router.post('/put', multer({storage: storage}).single('data'), function(req, res
         }
         console.log(stdout);
     });
-    */
+
     //console.log(req.body.status);
     //console.log(JSON.parse(req.body));
-    console.log("algorithm="+req.query.algorithm);
+    //console.log("algorithm="+req.query.algorithm);
 
     res.render('index', { title: 'Express' });
 });
