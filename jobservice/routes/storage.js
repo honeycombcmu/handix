@@ -6,8 +6,11 @@ var router = express.Router();
 var localDir = "/Users/handixu/Documents/honeycomb/handix/jobservice"
 const exec = require('child_process').exec;
 var multer = require('multer');
-/* GET home page. */
+var redis = require("redis");
+var redis_client = redis.createClient();
+var async = require("async");
 
+/* GET home page. */
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, localDir + '/' + req.query.user);
@@ -15,7 +18,8 @@ var storage = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, req.query.filename); //Appending .jpg
     }
-})
+});
+
 router.use(function(req, res, next) {
 
     // log each request to the console
@@ -46,12 +50,60 @@ router.post('/put', multer({storage: storage}).single('data'), function(req, res
         }
         console.log(stdout);
     });
-
+    redis_client.sadd(user, filename);
     //console.log(req.body.status);
     //console.log(JSON.parse(req.body));
     //console.log("algorithm="+req.query.algorithm);
 
     res.render('index', { title: 'Express' });
+});
+
+router.post('/adduser', function(req, res, next) {
+    var username = req.query.username;
+    redis_client.sadd("_users", username);
+    console.log(req.query);
+    res.render('index', { title: 'Express' });
+});
+
+router.get('/dashboard', function(req, res, next) {
+
+    var userlist = [];
+
+    async.waterfall([
+        function(callback) {
+            redis_client.SMEMBERS('users', function (err, users) {
+                callback(null, users);
+            });
+        },
+        function(users, callback) {
+            console.log(users);
+            async.forEachOf(users, function(user, key, cb) {
+                console.log('!');
+                redis_client.SMEMBERS(user, function (err, files) {
+                    var current = {};
+                    current['name'] = user;
+                    current['links'] = files;
+
+                    userlist[key] = current;
+                    console.log(userlist);
+                    if(userlist.length == users.length) {
+
+                        console.log(JSON.stringify(userlist));
+                        res.render('fsvisual', { data: JSON.stringify(userlist) });
+
+                    }
+                });
+            }, null);
+            callback();
+
+        },
+        function(callback){
+
+        }],
+        null);
+
+
+
 });
 
 module.exports = router;

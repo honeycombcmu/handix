@@ -1,0 +1,24 @@
+doctype html
+html
+    body
+        meta(charset='utf-8')
+        script(src='//d3js.org/d3.v3.min.js')
+        ul
+            script.
+                var data = !{data};
+                var ul = d3.select("ul");
+                ul.selectAll("li")
+                        .data(data)
+                        .enter().append("li")
+                        .text(function(d) { return d.name; })
+                        .on("click", expand);
+                function expand(d) {
+                    d3.select(this)
+                            .on("click", null)
+                            .append("ul")
+                            .selectAll("li")
+                            .data(d.links)
+                            .enter().append("li")
+                            .text(function(d) { return d; });
+                }
+
